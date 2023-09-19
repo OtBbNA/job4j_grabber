@@ -12,7 +12,7 @@ import static org.quartz.SimpleScheduleBuilder.*;
 
 public class AlertRabbit {
 
-    public static Properties getInterval() throws Exception{
+    public static Properties getInterval() throws Exception {
         Properties config = new Properties();
         try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
             config.load(in);
@@ -20,7 +20,7 @@ public class AlertRabbit {
         return config;
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         try {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
