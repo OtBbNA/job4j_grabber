@@ -12,23 +12,6 @@ public class Post {
     private LocalDateTime created;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Post post = (Post) o;
-        return title.equals(post.title) && link.equals(post.link) && description.equals(post.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, link, description);
-    }
-
-    @Override
     public String toString() {
         return "Post{"
                 + "id=" + id
@@ -37,5 +20,22 @@ public class Post {
                 + ", description='" + description + '\''
                 + ", created=" + created
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Post post = (Post) o;
+        return id == post.id && link.equals(post.link);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, link);
     }
 }
