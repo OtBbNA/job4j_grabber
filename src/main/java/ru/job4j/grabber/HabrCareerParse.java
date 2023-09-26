@@ -24,8 +24,26 @@ public class HabrCareerParse implements Parce {
 
     private static final String DEVELOPER_PAGE = String.format("%s?page=", PAGE_LINK);
 
-    public static String retrieveDescription(String link) throws IOException {
-        return Jsoup.connect(link).get().select(".style-ugc").text();
+    public static String retrieveDescription(String link) {
+        String rsl = null;
+        try {
+            rsl = Jsoup.connect(link).get().select(".style-ugc").text();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rsl;
+    }
+
+    private Post postCreator(Element row) {
+        Element dateElement = row.select(".vacancy-card__date").first();
+        Element dateLinkElement = dateElement.child(0);
+        Element titleElement = row.select(".vacancy-card__title").first();
+        Element linkElement = titleElement.child(0);
+        String vacancyTitle = titleElement.text();
+        String vacancyLink = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
+        String vacancyDescription = retrieveDescription((String.format("%s%s", SOURCE_LINK, linkElement.attr("href"))));
+        LocalDateTime vacancyCreated = new HabrCareerDateTimeParser().parse(dateLinkElement.attr("datetime"));
+        return new Post(ids, vacancyTitle, vacancyLink, vacancyDescription, vacancyCreated);
     }
 
     @Override
@@ -36,20 +54,7 @@ public class HabrCareerParse implements Parce {
             Document document = connection.get();
             Elements rows = document.select(".vacancy-card__inner");
             rows.forEach(row -> {
-                Element dateElement = row.select(".vacancy-card__date").first();
-                Element dateLinkElement = dateElement.child(0);
-                Element titleElement = row.select(".vacancy-card__title").first();
-                Element linkElement = titleElement.child(0);
-                String vacancyTitle = titleElement.text();
-                String vacancyLink = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
-                String vacancyDescription = null;
-                try {
-                    vacancyDescription = retrieveDescription((String.format("%s%s", SOURCE_LINK, linkElement.attr("href"))));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                LocalDateTime vacancyCreated = new HabrCareerDateTimeParser().parse(dateLinkElement.attr("datetime"));
-                rsl.add(new Post(ids, vacancyTitle, vacancyLink, vacancyDescription, vacancyCreated));
+                rsl.add(postCreator(row));
                 ids++;
             });
         }
