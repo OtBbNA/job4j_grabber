@@ -22,9 +22,7 @@ public class HabrCareerParse implements Parce {
 
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
 
-    private static final String DEVELOPER_PAGE = String.format("%s?page=", PAGE_LINK);
-
-    public static String retrieveDescription(String link) {
+    private String retrieveDescription(String link) {
         String rsl = null;
         try {
             rsl = Jsoup.connect(link).get().select(".style-ugc").text();
@@ -59,12 +57,5 @@ public class HabrCareerParse implements Parce {
             });
         }
         return rsl;
-    }
-
-    public static void main(String[] args) throws IOException {
-        HabrCareerParse habrCareerParse = new HabrCareerParse();
-        for (Post post : habrCareerParse.list(DEVELOPER_PAGE)) {
-            System.out.println(post);
-        }
     }
 }
