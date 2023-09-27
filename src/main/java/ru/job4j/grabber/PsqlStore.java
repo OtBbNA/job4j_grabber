@@ -1,7 +1,6 @@
 package ru.job4j.grabber;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -105,18 +104,5 @@ public class PsqlStore implements Store {
 
     private LocalDateTime timeConverterToLocalDateTime(Timestamp ts) {
         return ts.toLocalDateTime();
-    }
-
-    public static void main(String[] args) throws IOException {
-        Properties config = new Properties();
-        PsqlStore psqlStore = new PsqlStore(config);
-        HabrCareerParse habrCareerParse = new HabrCareerParse();
-        for (Post post: habrCareerParse.list("https://career.habr.com/vacancies/java_developer?page=")) {
-            psqlStore.save(post);
-        }
-        System.out.println(psqlStore.findById(13));
-        for (Post post: psqlStore.getAll()) {
-            System.out.println(post);
-        }
     }
 }

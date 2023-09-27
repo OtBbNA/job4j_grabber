@@ -12,15 +12,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HabrCareerParse implements Parce {
-
-    private static int ids = 1;
+public class HabrCareerParse implements Parse {
 
     private static int pagesNum = 5;
 
     private static final String SOURCE_LINK = "https://career.habr.com";
 
-    private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
+    public HabrCareerParse() {
+    }
 
     private String retrieveDescription(String link) {
         String rsl = null;
@@ -41,7 +40,7 @@ public class HabrCareerParse implements Parce {
         String vacancyLink = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
         String vacancyDescription = retrieveDescription((String.format("%s%s", SOURCE_LINK, linkElement.attr("href"))));
         LocalDateTime vacancyCreated = new HabrCareerDateTimeParser().parse(dateLinkElement.attr("datetime"));
-        return new Post(ids, vacancyTitle, vacancyLink, vacancyDescription, vacancyCreated);
+        return new Post(vacancyTitle, vacancyLink, vacancyDescription, vacancyCreated);
     }
 
     @Override
@@ -53,7 +52,6 @@ public class HabrCareerParse implements Parce {
             Elements rows = document.select(".vacancy-card__inner");
             rows.forEach(row -> {
                 rsl.add(postCreator(row));
-                ids++;
             });
         }
         return rsl;
