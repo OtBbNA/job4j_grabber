@@ -18,7 +18,10 @@ public class HabrCareerParse implements Parse {
 
     private static final String SOURCE_LINK = "https://career.habr.com";
 
-    public HabrCareerParse() {
+    private static HabrCareerDateTimeParser habrCareerDateTimeParser;
+
+    public HabrCareerParse(HabrCareerDateTimeParser habrCareerDateTimeParser) {
+        this.habrCareerDateTimeParser = new HabrCareerDateTimeParser();
     }
 
     private String retrieveDescription(String link) {
@@ -39,7 +42,7 @@ public class HabrCareerParse implements Parse {
         String vacancyTitle = titleElement.text();
         String vacancyLink = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
         String vacancyDescription = retrieveDescription((String.format("%s%s", SOURCE_LINK, linkElement.attr("href"))));
-        LocalDateTime vacancyCreated = new HabrCareerDateTimeParser().parse(dateLinkElement.attr("datetime"));
+        LocalDateTime vacancyCreated = habrCareerDateTimeParser.parse(dateLinkElement.attr("datetime"));
         return new Post(vacancyTitle, vacancyLink, vacancyDescription, vacancyCreated);
     }
 

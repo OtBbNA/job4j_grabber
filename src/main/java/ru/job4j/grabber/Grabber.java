@@ -89,7 +89,7 @@ public class Grabber implements Grab {
         }
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.start();
-        var parse = new HabrCareerParse();
+        var parse = new HabrCareerParse(new HabrCareerDateTimeParser());
         var store = new PsqlStore(cfg);
         var time = Integer.parseInt(cfg.getProperty("time"));
         Grabber grab = new Grabber(parse, store, scheduler, time);
