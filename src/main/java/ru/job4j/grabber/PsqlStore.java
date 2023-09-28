@@ -54,8 +54,8 @@ public class PsqlStore implements Store {
                 while (resultSet.next()) {
                     post.add(postCreator(resultSet.getInt("id"),
                             resultSet.getString("name"),
-                            resultSet.getString("text"),
                             resultSet.getString("link"),
+                            resultSet.getString("text"),
                             timeConverterToLocalDateTime(resultSet.getTimestamp("created")))
                     );
                 }
@@ -75,8 +75,8 @@ public class PsqlStore implements Store {
                 while (resultSet.next()) {
                     post = postCreator(resultSet.getInt("id"),
                             resultSet.getString("name"),
-                            resultSet.getString("text"),
                             resultSet.getString("link"),
+                            resultSet.getString("text"),
                             timeConverterToLocalDateTime(resultSet.getTimestamp("created"))
                     );
                 }
