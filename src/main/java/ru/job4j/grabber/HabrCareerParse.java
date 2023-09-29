@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.grabber.utils.DateTimeParser;
 import ru.job4j.grabber.utils.HabrCareerDateTimeParser;
 
 import java.io.IOException;
@@ -18,10 +19,10 @@ public class HabrCareerParse implements Parse {
 
     private static final String SOURCE_LINK = "https://career.habr.com";
 
-    private static HabrCareerDateTimeParser habrCareerDateTimeParser;
+    private static DateTimeParser dateTimeParser;
 
-    public HabrCareerParse(HabrCareerDateTimeParser habrCareerDateTimeParser) {
-        this.habrCareerDateTimeParser = new HabrCareerDateTimeParser();
+    public HabrCareerParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
     }
 
     private String retrieveDescription(String link) {
@@ -42,7 +43,7 @@ public class HabrCareerParse implements Parse {
         String vacancyTitle = titleElement.text();
         String vacancyLink = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
         String vacancyDescription = retrieveDescription((String.format("%s%s", SOURCE_LINK, linkElement.attr("href"))));
-        LocalDateTime vacancyCreated = habrCareerDateTimeParser.parse(dateLinkElement.attr("datetime"));
+        LocalDateTime vacancyCreated = dateTimeParser.parse(dateLinkElement.attr("datetime"));
         return new Post(vacancyTitle, vacancyLink, vacancyDescription, vacancyCreated);
     }
 
